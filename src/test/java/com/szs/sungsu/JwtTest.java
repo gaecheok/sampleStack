@@ -1,6 +1,6 @@
 package com.szs.sungsu;
 
-import com.szs.sungsu.config.JwtTokenProvider;
+import com.szs.sungsu.config.jwt.JwtTokenProvider;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.junit.jupiter.api.Test;
 

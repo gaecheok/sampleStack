@@ -1,10 +1,11 @@
 package com.szs.sungsu.util;
 
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.security.GeneralSecurityException;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 class TwoWayEncryptUtilTest {
@@ -18,7 +19,7 @@ class TwoWayEncryptUtilTest {
         String encrypt = TwoWayEncryptUtil.encrypt(input);
 
         // then
-        Assertions.assertThat(encrypt).isNotEmpty();
+        assertThat(encrypt).isNotEmpty();
     }
 
     @Test
@@ -31,6 +32,6 @@ class TwoWayEncryptUtilTest {
         String decrypt = TwoWayEncryptUtil.decrypt(encrypt);
 
         // then
-        Assertions.assertThat(decrypt).isEqualTo(input);
+        assertThat(decrypt).isEqualTo(input);
     }
 }

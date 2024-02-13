@@ -1,7 +1,8 @@
 package com.szs.sungsu.service;
 
-import com.szs.sungsu.config.JwtTokenProvider;
+import com.szs.sungsu.config.jwt.JwtTokenProvider;
 import com.szs.sungsu.domain.Member;
+import com.szs.sungsu.exception.MemberException;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +51,7 @@ public class MemberServiceTest {
 
         // then
         assertThatThrownBy(() -> memberService.joinMember(userId, password, name, regNo))
-                .isInstanceOf(IllegalStateException.class);
+                .isInstanceOf(MemberException.class);
     }
 
     // 로그인+토큰검증
@@ -84,7 +85,7 @@ public class MemberServiceTest {
         // when
         memberService.joinMember(userId, password, name, regNo);
         assertThatThrownBy(() -> memberService.jwtLogin(userId, wrongPassword))
-                .isInstanceOf(IllegalStateException.class);
+                .isInstanceOf(MemberException.class);
     }
 
     // 로그인-없는아이디
@@ -101,7 +102,7 @@ public class MemberServiceTest {
         // when
         memberService.joinMember(userId, password, name, regNo);
         assertThatThrownBy(() -> memberService.jwtLogin(wrongUserId, password))
-                .isInstanceOf(IllegalStateException.class);
+                .isInstanceOf(MemberException.class);
     }
 
 
