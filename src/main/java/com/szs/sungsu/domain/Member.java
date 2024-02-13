@@ -3,6 +3,7 @@ package com.szs.sungsu.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.ToString;
+import org.hibernate.validator.constraints.Length;
 
 @Entity
 @Getter
@@ -21,8 +22,10 @@ public class Member extends BaseTimeEntity {
     @Column(name = "member_id")
     private Long id;
 
+    @Length(max = 20)
     private String userId;
     private String password;
+    @Length(max = 20)
     private String name;
     private String regNo;
 
