@@ -7,6 +7,7 @@ import com.szs.sungsu.api.response.RefundResponse;
 import com.szs.sungsu.domain.Member;
 import com.szs.sungsu.domain.ScrapStatus;
 import com.szs.sungsu.domain.Tax;
+import com.szs.sungsu.exception.MemberException;
 import com.szs.sungsu.repository.MemberRepository;
 import com.szs.sungsu.repository.TaxJpaRepository;
 import com.szs.sungsu.repository.TaxRepository;
@@ -70,7 +71,8 @@ public class TaxService {
         // 1 select Member
         Optional<Member> maybeMember = memberRepository.findFirstByUserIdEquals(userId);
         if (maybeMember.isEmpty()) {
-            throw new IllegalStateException("존재하지 않는 userId : " + userId);
+            log.warn("존재하지 않는 userId={}",userId);
+            throw new MemberException("유저 정보가 올바르지 않습니다.");
         }
 
         // 준영속 tax
@@ -111,7 +113,7 @@ public class TaxService {
              별도 배치를 통해서 상태가 진행중인데 오래된 데이터는 다시 시도하도록 해야함
              */
             log.error("scrap remote api call fail, userId={}", userId);
-            throw new IllegalStateException("...");
+            throw new IllegalStateException();
         }
 
         // 응답 결과 json 파싱
@@ -134,8 +136,8 @@ public class TaxService {
             JsonNode rootNode = om.readTree(jsonStr);
             if (!rootNode.get("status").asText("").equals("success")) {
                 // 외부 호출 결과 실패. 그대로 끝내기
-                log.error("remote call fail : responseBody={}", jsonStr);
-                throw new RuntimeException();
+                log.error("scrap remote api call fail, responseBody={}", jsonStr);
+                throw new IllegalStateException();
             }
 
             JsonNode dataNode = rootNode.get("data");
@@ -188,14 +190,14 @@ public class TaxService {
         Tax tax = taxJPARepository.findTaxByUserId(userId);
 
         if (tax.getScrapStatus().equals(ScrapStatus.INPROGRESS)) {
-            throw new IllegalStateException("진행중입니다, 나중에 다시 시도해주세요");
+            throw new MemberException("조회가 진행중입니다, 나중에 다시 시도해주세요");
         }
 
         // 계산 로직
         Pair<BigDecimal, BigDecimal> pair = calculateTax(tax);
 
         RefundResponse response = new RefundResponse();
-        // NOTE(sss) 소수점 이하 정책은 버림으로 임의 설정 하였습니다
+        // NOTE(sss) 연산한 마지막 결과의 소수점 버림 정책으로 임의 설정 하였습니다
         response.setDeterminedTax(String.format("%,.0f", pair.getFirst().setScale(0, RoundingMode.DOWN)));
         response.setRetirement(String.format("%,.0f", pair.getSecond().setScale(0, RoundingMode.DOWN)));
         response.setName(tax.getMember().getName());

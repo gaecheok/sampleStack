@@ -40,7 +40,7 @@ public class TaxController {
 
         Optional<String> maybeUserId = tokenProvider.getUserIdByToken(request);
         if (maybeUserId.isEmpty()) {
-            throw new IllegalStateException("토큰에 문제가 있습니다.");
+            throw new CustomJwtException("토큰정보가 올바르지 않습니다.");
         }
 
         // 상태 변경
@@ -64,7 +64,7 @@ public class TaxController {
 
         Optional<String> maybeUserId = tokenProvider.getUserIdByToken(request);
         if (maybeUserId.isEmpty()) {
-            throw new IllegalStateException("토큰에 문제가 있습니다.");
+            throw new CustomJwtException("토큰정보가 올바르지 않습니다.");
         }
 
         RefundResponse refundResponse = taxService.refund(maybeUserId.get());
