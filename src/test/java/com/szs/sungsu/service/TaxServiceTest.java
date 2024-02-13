@@ -4,8 +4,8 @@ import com.szs.sungsu.api.response.RefundResponse;
 import com.szs.sungsu.domain.Member;
 import com.szs.sungsu.domain.ScrapStatus;
 import com.szs.sungsu.domain.Tax;
+import com.szs.sungsu.exception.MemberException;
 import com.szs.sungsu.repository.MemberRepository;
-import com.szs.sungsu.repository.TaxJpaRepository;
 import com.szs.sungsu.repository.TaxRepository;
 import com.szs.sungsu.service.dto.RemoteCallResultDto;
 import jakarta.persistence.EntityManager;
@@ -63,7 +63,7 @@ class TaxServiceTest {
         String userId = "blank_user";
 
         // when
-        assertThatThrownBy(() -> taxService.preScrap(userId)).isInstanceOf(IllegalStateException.class);
+        assertThatThrownBy(() -> taxService.preScrap(userId)).isInstanceOf(MemberException.class);
     }
 
     @Test
@@ -97,14 +97,7 @@ class TaxServiceTest {
         String expected_결정세액 = "0";
 
         Tax tax = Tax.createTax(member);
-        Tax.scrapTax(tax,
-                총지급액,
-                산출세액,
-                보험료,
-                교육비,
-                기부금,
-                의료비,
-                퇴직연금);
+        Tax.scrapedTax(tax, 총지급액, 산출세액, 보험료, 교육비, 기부금, 의료비, 퇴직연금);
         em.persist(tax);
 
         // when
@@ -126,7 +119,7 @@ class TaxServiceTest {
         em.persist(tax);
 
         // then
-        assertThatThrownBy(() -> taxService.refund(userId)).isInstanceOf(IllegalStateException.class);
+        assertThatThrownBy(() -> taxService.refund(userId)).isInstanceOf(MemberException.class);
     }
 
 
@@ -149,14 +142,7 @@ class TaxServiceTest {
         BigDecimal expected_결정세액 = new BigDecimal("0");
 
         Tax tax = Tax.createTax(member);
-        Tax.scrapTax(tax,
-                총지급액,
-                산출세액,
-                보험료,
-                교육비,
-                기부금,
-                의료비,
-                퇴직연금);
+        Tax.scrapedTax(tax, 총지급액, 산출세액, 보험료, 교육비, 기부금, 의료비, 퇴직연금);
 
         // when
         Pair<BigDecimal, BigDecimal> pair = taxService.calculateTax(tax);
@@ -184,14 +170,7 @@ class TaxServiceTest {
         BigDecimal 결정세액 = new BigDecimal("595500");
 
         Tax tax = Tax.createTax(member);
-        Tax.scrapTax(tax,
-                총지급액,
-                산출세액,
-                보험료,
-                교육비,
-                기부금,
-                의료비,
-                퇴직연금);
+        Tax.scrapedTax(tax, 총지급액, 산출세액, 보험료, 교육비, 기부금, 의료비, 퇴직연금);
 
         // when
         Pair<BigDecimal, BigDecimal> pair = taxService.calculateTax(tax);

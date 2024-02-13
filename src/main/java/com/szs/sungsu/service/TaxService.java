@@ -120,7 +120,7 @@ public class TaxService {
         RemoteCallResultDto resultDto = parseScrap(responseEntity.getBody());
 
         // 1 update Tax by dirty check
-        Tax.scrapTax(tax,
+        Tax.scrapedTax(tax,
                 resultDto.getTotalPay(),
                 resultDto.getCalculatedTax(),
                 resultDto.getInsurance(),

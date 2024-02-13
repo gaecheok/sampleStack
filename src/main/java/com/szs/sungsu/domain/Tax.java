@@ -53,7 +53,7 @@ public class Tax extends BaseTimeEntity {
         return tax;
     }
 
-    public static void scrapTax(Tax tax, BigDecimal totalPayment, BigDecimal calculatedTax,
+    public static void scrapedTax(Tax tax, BigDecimal totalPayment, BigDecimal calculatedTax,
                                BigDecimal insurance, BigDecimal education, BigDecimal donation,
                                BigDecimal medical, BigDecimal retirement) {
         tax.totalPayment = totalPayment;

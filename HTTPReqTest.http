@@ -9,13 +9,24 @@ content-type: application/json
   "regNo": "860824-1655068"
 }
 
+### 회원가입
+POST http://localhost:8080/szs/signup
+content-type: application/json
+
+{
+  "userId": "kim",
+  "password": "1234",
+  "name": "김둘리",
+  "regNo": "921108-1582816"
+}
+
 ###
 홍길동 860824-1655068
 김둘리 921108-1582816
 마징가 880601-2455116
 베지터 910411-1656116
 손오공 820326-2715702
-###
+
 
 ### 로그인
 POST http://localhost:8080/szs/login
@@ -29,12 +40,9 @@ content-type: application/json
 ### 스크랩
 POST http://localhost:8080/szs/scrap
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzenMiLCJzdWIiOiJzaGluIiwidXNlcklkIjoiaG9uZyIsImlhdCI6MTcwNzcyODg4OCwiZXhwIjoxNzA3NzMyNDg4fQ.WWPxl3QRMToLtqLjUEvjoz2Trb2gDtbwHOPrIgYjiLA
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzenMiLCJzdWIiOiJzaGluIiwidXNlcklkIjoiaG9uZyIsImlhdCI6MTcwNzc5Njc3OSwiZXhwIjoxNzA3ODAwMzc5fQ.JqRuiF40c9JwoBgV9p1JT-wSknv2EFY79l5jum1RPRE
 
-{
-  "req": "123"
-}
 
 ### 세액조회
-GET http://localhost:8080/szs/refund?req=123
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzenMiLCJzdWIiOiJzaGluIiwidXNlcklkIjoiaG9uZyIsImlhdCI6MTcwNzcyODg4OCwiZXhwIjoxNzA3NzMyNDg4fQ.WWPxl3QRMToLtqLjUEvjoz2Trb2gDtbwHOPrIgYjiLA
+GET http://localhost:8080/szs/refund
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzenMiLCJzdWIiOiJzaGluIiwidXNlcklkIjoiaG9uZyIsImlhdCI6MTcwNzc5Njc3OSwiZXhwIjoxNzA3ODAwMzc5fQ.JqRuiF40c9JwoBgV9p1JT-wSknv2EFY79l5jum1RPRE
