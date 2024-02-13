@@ -1,6 +1,5 @@
 package com.szs.sungsu.exception;
 
-import com.szs.sungsu.exception.CommonException;
 import org.springframework.http.HttpStatus;
 
 public class CustomJwtException extends CommonException {
