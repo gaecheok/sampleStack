@@ -1,4 +1,4 @@
-package com.szs.sungsu.config;
+package com.szs.sungsu.config.jwt;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;

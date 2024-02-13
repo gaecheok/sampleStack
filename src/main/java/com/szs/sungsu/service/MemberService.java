@@ -1,6 +1,6 @@
 package com.szs.sungsu.service;
 
-import com.szs.sungsu.config.JwtTokenProvider;
+import com.szs.sungsu.config.jwt.JwtTokenProvider;
 import com.szs.sungsu.domain.Member;
 import com.szs.sungsu.exception.MemberException;
 import com.szs.sungsu.repository.MemberRepository;

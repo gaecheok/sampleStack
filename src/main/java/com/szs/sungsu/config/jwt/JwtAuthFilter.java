@@ -1,5 +1,6 @@
-package com.szs.sungsu.config;
+package com.szs.sungsu.config.jwt;
 
+import com.szs.sungsu.config.CustomUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -8,22 +9,20 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.List;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
     private final JwtTokenProvider tokenProvider;
+    private final CustomUserDetailsService userDetailsService;
     private static final String BEARER_PREFIX = "Bearer ";
 
     @Override
@@ -34,13 +33,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         // validateToken 으로 토큰 유효성 검사
         if (StringUtils.hasText(jwtToken) && tokenProvider.validateToken(jwtToken)) {
             String userId = tokenProvider.extractUserId(jwtToken);
-
-            /*
-             NOTE(sss) 권한은 임의로 지정 하였습니다.
-             용도에 따라 디비나 토큰에 권한을 저장하고 가져와 사용하도록 구현이 가능할거 같습니다.
-            */
-            UserDetails userDetails = new User(userId, "",
-                    List.of(new SimpleGrantedAuthority("role_refund")));
+            UserDetails userDetails = userDetailsService.loadUserByUsername(userId);
 
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(

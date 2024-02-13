@@ -1,5 +1,6 @@
 package com.szs.sungsu.config;
 
+import com.szs.sungsu.config.jwt.JwtAuthFilter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -18,11 +19,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    private final CustomUserDetailsService userDetailsService;
     private final JwtAuthFilter jwtAuthFilter;
     private static final String[] WHITE_LIST = {
             "/szs/signup", "/szs/login",
             //"/szs/scrap", "/szs/refund",
-            "/swagger-ui/**"
+            "/swagger-ui/**", "/swagger-resources/**", "/v3/api-docs/**"
     };
 
     @Bean
@@ -40,7 +42,8 @@ public class SecurityConfig {
                         log.error(e.getMessage(), e);
                     }
                 })
-                //.exceptionHandling(c -> c.authenticationEntryPoint(entryPoint).accessDeniedHandler(accessDeniedHandler))
+                .userDetailsService(userDetailsService)
+                .exceptionHandling(c -> c.authenticationEntryPoint(entryPoint()))
                 .sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
@@ -49,6 +52,11 @@ public class SecurityConfig {
     @Bean
     public BCryptPasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public CustomEntryPoint entryPoint() {
+        return new CustomEntryPoint();
     }
 
 }
