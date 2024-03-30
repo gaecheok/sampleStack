@@ -41,7 +41,7 @@ import java.util.stream.StreamSupport;
 @Transactional(readOnly = true)
 public class TaxService {
 
-    public static final String API_URL = "https://codetest.3o3.co.kr/v2/scrap";
+    public static final String API_URL = "";
 
     private final TaxRepository taxRepository;
     private final TaxJpaRepository taxJPARepository;
